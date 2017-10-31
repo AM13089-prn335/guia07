@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp">
+<h:head>
+        <title>Tipo Paso</title>
+    </h:head>
+    <h:body>
+        
+        <ui:composition template="./TemplateTP.xhtml">
+            <ui:define name="content">
+               
+            
+        <h1>TIPO PASO</h1>
+        <br />
+        <f:view>
+
+
+            <h:form id="frmtabla1">
+                
+                <h:outputText value="Mostrar Solamente los Utilizados" />
+                <p:selectBooleanCheckbox value="#{TipoPasoBean.activo}">
+                    <p:ajax update="@all" listener="#{TipoPasoBean.chkCambio()}" />
+        </p:selectBooleanCheckbox>
+                </h:form>
+            
+           
+                
+                <br/>
+                <h:form id="frm1">
+                
+                <p:dataTable id="tblTipoPaso" value="#{TipoPasoBean.obtenerTodos()}" var="item"
+                             rows="3" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="3,5,10"
+                             selectionMode="single" selection="#{TipoPasoBean.editTabal}" rowKey="#{item.idTipoPaso}">
+                             
+                    <p:ajax event="rowSelect" listener="#{TipoPasoBean.onRowSelect}" update=":frmcrear"/>
+                     <p:growl id="growl" showDetail="true" sticky="true" />
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="IdTipoPaso"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idTipoPaso}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Nombre"/>
+                        </f:facet>
+                        <h:outputText value="#{item.nombre}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Activo"/>
+                        </f:facet>
+                        <h:outputText value="#{item.activo}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Descripcion"/>
+                        </f:facet>
+                        <h:outputText value="#{item.descripcion}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </f:view>
+
+        <f:view>
+            <h:form>
+            <p:panel>
+                <ez:NuevoComposite actionNuevo="#{TipoPasoBean}"/>
+            </p:panel>
+                </h:form>
+            <h:form id="frmcrear">
+                 <p:growl id="growl" showDetail="true" sticky="true" /> 
+                <h1><h:outputText value="Crear/Editar"/></h1>
+                <p:panelGrid columns="2">  
+                    <p:outputLabel value="Nombre:" for="nombre" />
+                    <p:inputText id="nombre" value="#{TipoPasoBean.tipoPaso.nombre}" title="Nombre" required="true" requiredMessage="The Nombre field is required."/>
+        <h:outputText value="Activo: " />
+        <p:selectBooleanCheckbox value="#{TipoPasoBean.tipoPaso.activo}" />
+                    <p:outputLabel value="Descripcion:" for="descripcion" />
+                    <p:inputText id="descripcion" value="#{TipoPasoBean.tipoPaso.descripcion}" title="Descripcion" />
+                
+                </p:panelGrid>
+               
+                <p:panel visible="#{TipoPasoBean.visible}">
+                
+                    <ez:CrearComposite actionCrear="#{TipoPasoBean}"/>
+                
+                </p:panel>
+               
+               
+                <p:panel visible="#{!TipoPasoBean.visible}" style="border: #fefefe">
+                
+                    <ez:EditComposite actionEdit="#{TipoPasoBean}"/>
+                    
+                </p:panel>
+           
+            
+            </h:form>
+        </f:view>
+        </ui:define>
+      </ui:composition>
+    </h:body>
+</html>
+
